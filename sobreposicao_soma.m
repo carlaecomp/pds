@@ -19,9 +19,7 @@ aprox_x = L -rem(SIZE_X, L);
 aprox_h = N -M;
 
 H = [H zeros(1,aprox_h)];
-length(H)
 X = [X zeros(1,aprox_x)];
-length(X)
 %% Convoluindo os sinais
 
 tam_bloco = NEW_X_SIZE/L;
@@ -29,9 +27,9 @@ tam_bloco = NEW_X_SIZE/L;
 Y_k = zeros(tam_bloco, N);
 
 Y = zeros(1, tam_bloco*(N-M+1));
-plot(conv(X,H))
-title("conv do matlab")
-figure
+plot(conv(X,H));
+title("conv do matlab");
+figure;
 
 for k = 0:tam_bloco-1
     begin_v = (L*k+1);
@@ -40,33 +38,28 @@ for k = 0:tam_bloco-1
     X_l = [X_l zeros(1, M-1)];
     Y_freq = fft(X_l).*fft(H);
     Y_k(k+1,:) = ifft(Y_freq); %%mudar depois aqui
-%     plot(Y_k(k+1,:))
-%     title(strcat("conv parcial", num2str(k)))
-%     figure
-%     plot(conv(X_l, H))
-%     title(strcat("conv parcial 2 ",num2str(k))
-%     figure
 end
 
 begin_v = 1;
 end_v = L;
 for k = 0:tam_bloco-2
-    Y(begin_v:end_v) = Y_k(k+1,1:L);
-    begin_sobre = end_v +1 ;
-    end_sobre = N*(k+1)+1;
+    
+    if(length(Y) < (k+1)*N)
+        break
+    end
+    
+    Y((k*N+1):(k+1)*N) = Y_k(k+1,:);
+
+    end_sobre = (k+1)*N;
+    begin_sobre = end_sobre -(M-1)+1;
     
     dif = end_sobre - begin_sobre+1; 
-    
-    
-    
     begin_v = end_sobre+1;
-    end_v = begin_v -1 + L
-    
-    Y(begin_sobre:end_sobre) = Y_k(k+1, N-dif+1:N) + Y_k(k+2, 1:dif);
-    plot(Y)
-    title('Y');
-    figure
-    
+    end_v = begin_v -1 + L;
+    p = "porra"
+    length(Y(begin_sobre:end_sobre))
+    length(Y_k(k+2, 1:(M)))
+    Y(begin_sobre:end_sobre) =  Y(begin_sobre:end_sobre) + Y_k(k+2, 1:(M-1));
 end
-%  plot(Y)
-%  title('Y');
+ plot(Y);
+ title('Y');
