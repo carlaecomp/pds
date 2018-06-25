@@ -16,9 +16,11 @@ H = rectangularPulse(-SIZE_H/4, SIZE_H/4, t_h);
 
 aprox_x = L -rem(SIZE_X, L);
 NEW_X_SIZE = SIZE_X + aprox_x;
-aprox_h = N -M;
+aprox_h = N - M;
 
+%%% Tornando H divisivel por N
 H = [H zeros(1,aprox_h)];
+%%% Tornando X divisivel por L
 X = [X zeros(1,aprox_x)];
 %% Convoluindo os sinais
 
@@ -38,6 +40,7 @@ end
 %% Sobreposicao
 
 for k = 0:qtd_bloco -2
+    %%% Final do bloco atual recebe inicio do proximo bloco
     Y(k+1,N-(M-1)+1:N) = Y(k+1,N-(M-1)+1:N) + Y(k+2, 1:(M-1));
 end
 
@@ -46,4 +49,4 @@ Y=(sobrep(:))';
 
 figure;
 plot(Y);
-title('Y');
+title('Y Sobreposição e Soma');
